@@ -1,74 +1,411 @@
 <!DOCTYPE HTML>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
 
-  <title>Junlin Li</title>
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="keywords" content="Junlin Li; ">
-  <meta name="author" content="Junlin Li">
-  
-  
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
-  <link rel="stylesheet" type="text/css" href="styles_responsive.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Candara&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.0.1/prism-bibtex.min.js"></script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Junlin Li</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Junlin Li; ">
+    <meta name="author" content="Junlin Li">
 
 
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="styles_responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Candara&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.0.1/prism-bibtex.min.js"></script>
+    <style>
+        /* 全局基础 */
+        .projects {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        /* wrapper 包含 card + detail */
+        .project-wrapper {
+            margin-bottom: 20px;
+        }
+
+        /* 卡片主体（预览部分） */
+        .project-card {
+            display: flex;
+            gap: 16px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: box-shadow .2s, transform .2s;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* 左侧预览图 */
+        .card-left img {
+            width: 180px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* 右侧文字 */
+        .card-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 标题靠左、小标题靠左 */
+        .project-title {
+            text-align: left;
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .project-subtitle {
+            text-align: left;
+            margin: 6px 0 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: #e6f2ff;
+            border: 1px solid #b6d7ff;
+            color: #2a5fa8;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        /* ================================
+      论文风 Academic Style 
+   ================================ */
+
+        /* 展开部分（论文内容区） */
+        .project-detail {
+            background: rgba(212, 223, 243, 0.32);
+            border-radius: 0 0 12px 12px;
+            border-left: 4px solid rgba(222, 227, 248, 0.55);
+
+            margin-top: 4px;
+            padding: 0 28px;
+
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s ease;
+
+            font-family:
+                "Times New Roman",
+                "Source Han Serif SC",
+                "Songti SC",
+                serif;
+        }
+
+        /* 论文风的分节 */
+        .detail-section {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+        }
+
+        .detail-section:last-child {
+            border-bottom: none;
+        }
+
+        /* 小标题 = 左侧蓝色竖条 + Times New Roman 粗体 */
+        .detail-subtitle {
+            font-size: 20px;
+            margin-bottom: 14px;
+            font-weight: 700;
+            color: #090a0c;
+
+            display: flex;
+            align-items: center;
+
+            font-family: "Times New Roman", serif;
+        }
+
+        /* 左侧竖条（更论文风） */
+        .detail-subtitle::before {
+            content: "";
+            width: 4px;
+            height: 20px;
+
+            background: linear-gradient(180deg, #7088b8, #1f3a8a);
+            border-radius: 2px;
+            margin-right: 10px;
+        }
+
+        /* 正文内容（论文段落风） */
+        .project-detail p {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.75;
+            text-align: left;
+            text-indent: 2em;
+            margin-top: 8px;
+            font-family:
+                "Times New Roman",
+                "Source Han Serif SC",
+                "Songti SC",
+                serif;
+        }
+
+        /* 列表（论文格式） */
+
+        .styled-list {
+            list-style: none;
+            /* 移除默认圆点 */
+            padding-left: 0;
+            /* 取消默认缩进 */
+            margin-left: 0;
+            text-align: left;
+        }
+
+        .styled-list li {
+            counter-increment: item;
+            /* 每个 li 计数+1 */
+            position: relative;
+            padding-left: 1.4em;
+            /* 控制图标与文字间距，保证对齐 */
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.65;
+            color: #333;
+        }
+
+        /* 自定义项目符号：小方点 ▪ */
+        .styled-list li::before {
+            content: "▪";
+            /* 专业感更强，比 · 圆点更论文风 */
+            position: absolute;
+            left: 0;
+            top: 0.1em;
+            font-size: 14px;
+            color: #000;
+            /* 黑色符号更稳重 */
+        }
+
+        /* 前后对比图区域（论文图注风） */
+        .compare-container {
+            margin-top: 22px;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .compare-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .compare-title {
+            font-family: "Times New Roman", serif;
+            font-style: italic;
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .compare-item img {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.22);
+        }
+
+        /* 摘要段落 */
+        .project-abstract {
+            font-size: 16px;
+            color: #333;
+            text-indent: 2em;
+            line-height: 1.75;
+            text-align: left;
+        }
+
+        /* Mobile 优化 */
+        @media (max-width: 768px) {
+            .project-card {
+                flex-direction: column;
+            }
+
+            .card-left img {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        /* 项目时间标签 */
+        .project-time {
+            /* position: absolute; */
+            top: 12px;
+            right: 16px;
+            /* ⭐ 改为右侧即可 */
+            padding: 3px 8px;
+            font-family: "Times New Roman", serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            float: right;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 6px;
+
+            backdrop-filter: blur(2px);
+        }
+
+        /* 让 project-card 成为相对定位容器 */
+        /* .project-card {
+            position: relative;   
+        } 
+
+        */
+
+        /* 论文风表格包装（避免溢出） */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* 论文风表格 */
+        .paper-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: "Times New Roman", serif;
+            font-size: 14px;
+            color: #222;
+            background: #fff;
+        }
+
+        /* 表头 */
+        .paper-table thead th {
+            border-bottom: 2px solid #333;
+            padding: 8px 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* 表格内容 */
+        .paper-table tbody td {
+            border-bottom: 1px solid #ccc;
+            padding: 6px 10px;
+            text-align: center;
+        }
+
+        /* 鼠标悬停高亮（轻论文风） */
+        .paper-table tbody tr:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* 最后一行不加额外灰线 */
+        .paper-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+    <script>
+        function toggleDetail(card) {
+            const wrapper = card.parentElement;
+            const detail = wrapper.querySelector('.project-detail');
+            const isOpen = wrapper.classList.contains('expanded');
+
+            if (!isOpen) {
+                detail.style.maxHeight = detail.scrollHeight + "px";
+                wrapper.classList.add('expanded');
+
+                // 展开完成后自动滚动到可视区
+                // detail.addEventListener('transitionend', function handler() {
+                //    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                //    detail.removeEventListener('transitionend', handler);
+                // });
+
+            } else {
+                detail.style.maxHeight = detail.scrollHeight + "px";
+                requestAnimationFrame(() => detail.style.maxHeight = "0px");
+                wrapper.classList.remove('expanded');
+            }
+        }
+
+
+    </script>
 </head>
 
 <body>
-<br>
+    <br>
     <div class="container_onecolumn">
         <div class="container">
-          
-        <div class="item text">
-              <p>
-                <name>Junlin Li (李俊霖)</name>
-              </p>
 
-              <p>
-                I am an Algorithm Engineer at Fussen Technology Co., Ltd., where I have been working for over two years.  
-                Prior to joining Fussen, I earned my Master’s degree in Computer Science from China Three Gorges University, and my Bachelor’s degree in the same field from Henan Normal University.
-              </p>
-            
-              <p>My research focuses on Medical Image Enhancement, including <u>Denoising</u>, <u>Super-Resolution</u>, <u>CT-Reconstruction(NeRF,3DGS)</u>. And also interested in leveraging Structure from Motion (SfM) to enhance human motion analysis.
-              </p>
-
-               <p><strong>Announcement:</strong> I am actively seeking cooperation opportunities and would be delighted to discuss how my expertise can benefit your team.</p>
-             
-              
-              <center>
+            <div class="item text">
                 <p>
-                  <!-- <a href="mailto:xgaobq@connect.ust.hk"><i class="fa fa-paper-plane"></i>&nbsp&nbspEmail</a></a> &nbsp/&nbsp -->
-                  <a href="https://scholar.google.com/citations?hl=en&user=ZxEhvYwAAAAJ"><i class="ai ai-google-scholar ai-fw" style="font-size: 1.3em;position: relative; top:0.1em;margin-left: -0.3em;"></i>Google Scholar</a> &nbsp/&nbsp
-                  <a href="https://github.com/aoxipo/"><i class="fa fa-github"></i>&nbsp&nbspGithub</a> &nbsp/&nbsp
-                  <strong>Email: </strong>407157175@qq.com
-                  <!-- <strong>Email: </strong>xgaobq@connect.ust.hk or xiangjun_gao@outlook.com -->
+                    <name>Junlin Li (李俊霖)</name>
                 </p>
-              </center>
 
-        </div>
+                <p>
+                    I am an Algorithm Engineer at Fussen Technology Co., Ltd., where I have been working for over two
+                    years.
+                    Prior to joining Fussen, I earned my Master’s degree in Computer Science from China Three Gorges
+                    University, and my Bachelor’s degree in the same field from Henan Normal University.
+                </p>
 
-          <center>
-            <div class="circular image">
-                  <img alt="profile photo" src="imgs_main/me-2.jpg">
+                <p>My research focuses on Medical Image Enhancement, including <u>Denoising</u>,
+                    <u>Super-Resolution</u>, <u>CT-Reconstruction(NeRF,3DGS)</u>. And also interested in leveraging
+                    Structure from Motion (SfM) to enhance human motion analysis.
+                </p>
+
+                <p><strong>Announcement:</strong> I am actively seeking cooperation opportunities and would be delighted
+                    to discuss how my expertise can benefit your team.</p>
+
+
+                <center>
+                    <p>
+                        <!-- <a href="mailto:xgaobq@connect.ust.hk"><i class="fa fa-paper-plane"></i>&nbsp&nbspEmail</a></a> &nbsp/&nbsp -->
+                        <a href="https://scholar.google.com/citations?hl=en&user=ZxEhvYwAAAAJ"><i
+                                class="ai ai-google-scholar ai-fw"
+                                style="font-size: 1.3em;position: relative; top:0.1em;margin-left: -0.3em;"></i>Google
+                            Scholar</a> &nbsp/&nbsp
+                        <a href="https://github.com/aoxipo/"><i class="fa fa-github"></i>&nbsp&nbspGithub</a>
+                        &nbsp/&nbsp
+                        <strong>Email: </strong>407157175@qq.com
+                        <!-- <strong>Email: </strong>xgaobq@connect.ust.hk or xiangjun_gao@outlook.com -->
+                    </p>
+                </center>
+
             </div>
-            <p><strong>思之而艺之，登峰造极</strong></p>
-          </center>
-            
+
+            <center>
+                <div class="circular image">
+                    <img alt="profile photo" src="imgs_main/me-2.jpg">
+                </div>
+                <p><strong>思之而艺之，登峰造极</strong></p>
+            </center>
+
         </div>
 
         <!-- <div class="item text"> -->
-          <!-- <div> -->
-            <!-- <p><br>
+        <!-- <div> -->
+        <!-- <p><br>
               <font color="red">
               <strong>I am actively looking for full-time internship positions.</strong>
               </font>
             Feel free to reach out to me! 
             </p> -->
-          <!-- </div> -->
+        <!-- </div> -->
 
         <!-- <div class="item text2">
           <p>
@@ -76,205 +413,570 @@
           </p>
         </div> -->
         <!-- <hr> -->
-        <!-- 
-         <div class="item text2">
-          <p>
-              <heading>Preprints</heading>
-               <heading>Preprints and Publications</heading> 
-          </p>
+
+        <div class="item text2">
+            <p>
+                <heading>Projects</heading>
+            </p>
         </div>
-        <hr>  
-        -->
+        <hr>
 
-        <!-- ViewCrafter -->
-        <!--          
-        <div class="container2">
-          <div class="item image2">
-            <img src='' width="auto"; height=120>
-          </div>
-          <div class="item text2">
-            <a href="">
-              <papertitle></papertitle>
-            </a>
-            <br>
-           
-              ljl
-            <br>
-            <i>Arxiv</i>, 2024. 
-            <br>
-              <div class="box">
-                <a href=""><i class="fa fa-external-link"></i> Project page</a>
-              </div>
-              <div class="box">
-                  <a href=""><i class="fa fa-github"></i> Code</a>
-                  <img alt="GitHub stars" style="vertical-align:middle" src="">
+        <div class="projects">
+
+            <div class="projects">
+
+                <!-- ======================= 项目 1 ======================= -->
+                <div class="project-wrapper">
+
+
+                    <div class="project-card" onclick="toggleDetail(this)">
+
+                        <div class="card-left">
+                            <img src="imgs_main/SWGF.png" alt="Preview 1">
+                        </div>
+
+                        <div class="card-right">
+                            <h2 class="project-title">全景影像去噪超分增强项目<div class="project-time">23.10 - 25.10</div>
+                            </h2>
+                            <h3 class="project-subtitle">面向 CBCT全景模式 的自适应噪声抑制模型，同时利用超分模型显著提升影像质量，增强对比度</h3>
+
+                            <div class="tags">
+                                <span class="tag">Denoise</span>
+                                <span class="tag">Super-Resolution</span>
+                            </div>
+                            <div class="project-abstract">
+                                <p>
+                                    CBCT 全景图像会受到散射噪声等干扰，使组织纹理被削弱、噪声覆盖、对比度下降等，从而影响医生病灶识别。
+                                    项目目标是构建一套能够适应不同噪声分布的高保真医学图像去噪，并确保对关键结构（如牙齿牙釉质牙本质分界线、骨小梁清晰度、关节对比度、金属植体边界等部分）
+                                    的保留与恢复能力。
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- 展开区 -->
+                    <div class="project-detail">
+
+                        <!-- 
+                            <div class="detail-section"> 
+                                <h4 class="detail-subtitle">描述（Description）</h4>
+                                <p>
+                                    CT/MRI 图像会受到高斯噪声、泊松噪声等干扰，使组织纹理被削弱，
+                                    从而影响医生病灶识别。项目目标是构建一套能够适应不同噪声分布的
+                                    高保真医学图像去噪系统，并确保对关键结构（如软组织边界）
+                                    的保留与恢复能力。
+                                </p>
+                            </div>
+                            -->
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">难点（Challenges）</h4>
+                            <ul class="styled-list">
+                                <li><strong>去噪过平滑导致清晰度的下降</strong></li>
+                                <ul>
+                                    <li>牙齿根管清晰度会因为去噪过度平滑导致清晰度下降</li>
+                                    <li>植体样本螺纹清晰度下降</li>
+                                    <li>上颌及鼻腔部分清晰度下降</li>
+                                </ul>
+                                <li><strong>去噪过平滑导致对比度的下降</strong></li>
+                                <ul>
+                                    <li>过曝区域（如关节间隙、上腭硬区等高密度结构）的动态范围适应性不足，导致处理后局部出现异常高亮斑块</li>
+                                    <li>非均匀性亮度异常，部分骨小梁结构呈现过度增强（亮度显著高于周围正常骨组织），而相邻骨小梁的亮度则保持相对正常，形成斑片状高亮</li>
+                                    <li>牙冠杂质过度平滑导致牙冠区域过白</li>
+                                    <li>牙周膜等间隙空气区域变更黑，一些过度区域被截断</li>
+                                </ul>
+                                <li><strong>去噪不均匀导致伪影残留</strong></li>
+                                <ul>
+                                    <li>背景噪声相比颌骨表面更容易去除，导致颌骨表现与周围反差过大</li>
+                                </ul>
+                                <li><strong>影像质量进一步要求</strong></li>
+                                <ul>
+                                    <li>要求整体表现一种金属光泽感，透亮，边界清晰。</li>
+                                </ul>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">问题分析（Decoupling and Analysis）</h4>
+                            <ul class="styled-list">
+                                <li><strong>去噪过平滑导致清晰度的下降</strong></li>
+                                <ul>
+                                    <li>
+                                        传统算法聚焦于均匀化处理，将其作为标签导致过渡区域模糊化与结构细节丢失问题，同时噪声以及杂质能够增强边界梯度感知和真实感，完美去除会导致整体失真。
+                                    </li>
+                                </ul>
+                                <li><strong>去噪过平滑导致对比度的下降</strong></li>
+                                <ul>
+                                    <li>
+                                        模型在处理中表现出动态范围压缩倾向，具体表现为：高密度区域（如骨皮质、金属修复体）的像素值被过度增强，呈现"白化"效应；低密度区域（如软组织、空气腔）则被进一步抑制，呈现"黑化"效应。类似于Sigmoid函数的饱和效应——在输入信号超出阈值范围时，输出梯度急剧衰减。
+                                    </li>
+                                </ul>
+                                <li><strong>去噪不均匀导致伪影残留</strong></li>
+                                <ul>
+                                    <li>
+                                        模型学习过程中，其难以有效处理分布强度范围之外的噪声，特别是当某些局部随机噪声的强度完全超出训练阶段所采用的数据增强范围时，模型性能会受到显著影响。瓦片推理方式同时进一步加剧问题。
+                                    </li>
+                                </ul>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">模型性能对比（Performance Comparison）</h4>
+
+                            <div class="table-wrapper">
+                                <table class="paper-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Method</th>
+                                            <th>L1</th>
+                                            <th>MSE</th>
+                                            <th>RMSE</th>
+                                            <th>SSIM</th>
+                                            <th>PSNR</th>
+                                            <th>Param / FLOPs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Origin Noise</td>
+                                            <td>0.0905</td>
+                                            <td>0.0275</td>
+                                            <td>0.1658</td>
+                                            <td>0.2594</td>
+                                            <td>17.4639</td>
+                                            <td>–</td>
+                                        </tr>
+                                        <tr>
+                                            <td>UNet</td>
+                                            <td>0.0370</td>
+                                            <td>0.0043</td>
+                                            <td>0.0589</td>
+                                            <td>0.8201</td>
+                                            <td>25.3405</td>
+                                            <td>143MB / 52.03G</td>
+                                        </tr>
+                                        <tr>
+                                            <td>WaveMix</td>
+                                            <td>0.0470</td>
+                                            <td>0.0083</td>
+                                            <td>0.0789</td>
+                                            <td>0.5457</td>
+                                            <td>23.1098</td>
+                                            <td>6.52MB / 79.22G</td>
+                                        </tr>
+                                        <tr>
+                                            <td>N2N</td>
+                                            <td>0.0323</td>
+                                            <td>0.0040</td>
+                                            <td>0.0561</td>
+                                            <td>0.7133</td>
+                                            <td>23.8673</td>
+                                            <td>3.82MB / 8.64G</td>
+                                        </tr>
+                                        <tr>
+                                            <td>RED</td>
+                                            <td>0.0799</td>
+                                            <td>0.0167</td>
+                                            <td>0.1153</td>
+                                            <td>0.6630</td>
+                                            <td>19.6097</td>
+                                            <td>7.05MB / 83.12G</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ours*</td>
+                                            <td>0.0021</td>
+                                            <td>0.0025</td>
+                                            <td>0.0493</td>
+                                            <td>0.7519</td>
+                                            <td>26.2308</td>
+                                            <td>114MB / 62.40G</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">解决方案 / 创新点（Solutions / Innovations）</h4>
+
+                            <ul class="styled-list">
+                                <li>Unet、RED、N2N、WaveMix、R2R实验验证，简单的模型改动无法达到严格的医学图像的需求，构建拉普拉斯金字塔和图像金字塔结构模型，同时使用小波分解和多头注意力以及一个特征采样注意力模块构建层与层的特征融合，学习各向异性的噪声频率下的特征结构，预测噪声结构增强模型收敛效果。</li>
+                                <li>传统 CLAHE 虽能提升整体对比度，但其基于 tile 的局部直方图均衡会在高亮区域引入两个问题：首先，由于局部直方图被强制展宽，金属高光区域原本连续的亮度梯度被削弱，使光泽结构变得平坦；其次，各 tile 之间的边界不具备空间连续性，导致明显的块状伪影，进一步破坏高光区的自然过渡。这类失真特别容易出现在植体高亮与周围组织的过渡区域，导致金属光泽无法真实呈现。为解决上述问题，提出基于高斯核的局部加权增强方法。与 CLAHE 的硬分块不同，高斯核提供了连续的空间权重分布，使增强作用在局部范围内平滑衰减，从而保留金属高光区域的梯度结构和亮度变化的连续性。此外，我们采用 Wallis 局部自适应公式对局部亮度均值与对比度进行调节，使增强结果在全图范围内趋向统一的亮度与对比度标准。与直方图均衡式的强制拉伸不同，Wallis 通过统计量匹配的方式适度提升高光区域的局部对比度，同时避免对非高亮区域造成过度增强。在两者结合下，高亮区的局部梯度得以有效保持，并在可控范围内得到增强，从而使金属光泽呈现更自然的亮度衰减与反射特性；同时，由于空间权重连续，块效应明显减少，整体结构细节也得以保持。实验结果表明，该方法在不牺牲周围组织结构真实感的前提下，能够显著提升金属植体表面的光泽表现。</li>
+                                <div class="compare-container">
+                                    <div class="compare-item">
+                                        <p class="compare-title">PipLine</p>
+                                        <img src="imgs_main/Wallis_pipline.png">
+                                    </div>
+                                    <div class="compare-item">
+                                        <p class="compare-title">Origin</p>
+                                        <img src="imgs_main/ET_wallis_before.png">
+                                    </div>
+                                </div>
+                                <div class="compare-container" >
+                                    <div class="compare-item">
+                                        <p class="compare-title">Wallis-Gaussian</p>
+                                        <img src="imgs_main/ET_wallis_after.png">
+                                    </div>
+                                    <div class="compare-item">
+                                        <p class="compare-title">CLAHE</p>
+                                        <img src="imgs_main/ET_CLAHE.png">
+                                    </div>
+                                </div>
+                                <li>
+                                    pass
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">结果（Results）</h4>
+                            <ul class="styled-list">
+                                <li>PSNR 提升 12 dB</li>
+                                <li>SSIM 达到 0.92</li>
+                                <li>在医院影像部门进行小规模测试并获得认可</li>
+                            </ul>
+                            <div class="compare-container" style="flex-direction: column;">
+                                <div class="compare-item">
+                                    <p class="compare-title">Before</p>
+                                    <img src="imgs_main/TM_1_before.bmp">
+                                </div>
+                                <div class="compare-item">
+                                    <p class="compare-title">After</p>
+                                    <img src="imgs_main/TM_1_after.bmp">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
-              <div class="box">
-                  <a href=""><i class="fa fa-file-pdf-o"></i> arXiv</a>
-              </div>
-          </div>
-        </div> -->
 
-        
-      <div class="item text2">
-                <p>
-                    <heading>Publications</heading>
-                </p>
-      </div>
-      <hr>
+
+                <!-- ======================= 项目 2 ======================= -->
+                <div class="project-wrapper">
+
+                    <div class="project-card" onclick="toggleDetail(this)">
+                        <div class="card-left">
+                            <img src="imgs_main/3DGS.png">
+                        </div>
+
+                        <div class="card-right">
+                            <h2 class="project-title">医学图像超分辨率重建 <div class="project-time">22.10 - 23.10</div>
+                            </h2>
+                            <h3 class="project-subtitle">提升低分辨率医学图像质量，提升临床诊断精度</h3>
+
+                            <div class="tags">
+                                <span class="tag">ESRGAN</span>
+                                <span class="tag">3D CNN</span>
+                                <span class="tag">PyTorch</span>
+                            </div>
+                            <div class="project-abstract">
+                                <p>
+                                    超声、低剂量 CT 等医学数据常存在分辨率不足的问题，
+                                    会影响血管、器官边缘的识别和测量。
+                                    本项目致力于构建支持 3D 体积数据的超分辨率模型，
+                                    用于提升临床图像整体质量。
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="project-detail">
+
+                        <!-- <div class="detail-section">
+                            <h4 class="detail-subtitle">描述（Description）</h4>
+                            <p>
+                                超声、低剂量 CT 等医学数据常存在分辨率不足的问题，
+                                会影响血管、器官边缘的识别和测量。
+                                本项目致力于构建支持 3D 体积数据的超分辨率模型，
+                                用于提升临床图像整体质量。
+                            </p>
+                        </div> -->
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">难点（Challenges）</h4>
+                            <ul class="styled-list">
+                                <li>3D 卷积模型训练显存占用极高</li>
+                                <li>需要保持体积数据的时序一致性</li>
+                                <li>容易出现伪影，影响临床测量可靠性</li>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">解决方案 / 创新点（Solutions / Innovations）</h4>
+                            <ul class="styled-list">
+                                <li>将 ESRGAN 架构拓展到 3D 卷积，提升体积结构捕获能力</li>
+                                <li>采用渐进式训练策略减少显存消耗</li>
+                                <li>引入 perceptual loss 抑制伪影、增强复原质量</li>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">结果（Results）</h4>
+                            ul class="styled-list">
+                            <li>空间分辨率提升 4 倍</li>
+                            <li>血管直径测量误差降低 30%</li>
+                            <li>成功部署到临床系统用于辅助诊断</li>
+                            </ul>
+                            <div class="compare-container">
+                                <div class="compare-item">
+                                    <p class="compare-title">Before</p>
+                                    <img src="imgs_main/3DGS.png">
+                                </div>
+                                <div class="compare-item">
+                                    <p class="compare-title">After</p>
+                                    <img src="imgs_main/3DGS.png">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ======================= 项目 3 ======================= -->
+                <div class="project-wrapper">
+
+                    <div class="project-card" onclick="toggleDetail(this)">
+                        <div class="card-left"><img src="imgs_main/3DGS.png"></div>
+
+                        <div class="card-right">
+                            <h2 class="project-title">基于 NeRF 的稀疏视角 CT 重建<div class="project-time">22.10 - 23.10</div>
+                            </h2>
+                            <h3 class="project-subtitle">利用 NeRF + 3DGS 重建稀疏投影下的高质量 CT 影像</h3>
+
+                            <div class="tags">
+                                <span class="tag">NeRF</span>
+                                <span class="tag">3D Gaussian Splatting</span>
+                                <span class="tag">PyTorch</span>
+                            </div>
+                            <div class="project-abstract">
+                                <p>
+                                    在低剂量扫描条件下，CT 投影视角稀疏，导致重建图像结构模糊或失真，
+                                    本项目使用 NeRF 构建连续场景表示，通过 3DGS 提升训练效率，
+                                    实现稀疏视角下的高质量 CT 重建。
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="project-detail">
+
+                        <!-- <div class="detail-section">
+                            <h4 class="detail-subtitle">描述（Description）</h4>
+                            <p>
+                                在低剂量扫描条件下，CT 投影视角稀疏，导致重建图像结构模糊或失真，
+                                本项目使用 NeRF 构建连续场景表示，通过 3DGS 提升训练效率，
+                                实现稀疏视角下的高质量 CT 重建。
+                            </p>
+                        </div> -->
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">难点（Challenges）</h4>
+                            <ul class="styled-list">
+                                <li>NeRF 原生训练速度非常慢</li>
+                                <li>医学场景要求极高的细节恢复能力</li>
+                                <li>稀疏投影带来严重的信息缺失</li>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">解决方案 / 创新点（Solutions / Innovations）</h4>
+                            <ul class="styled-list">
+                                <li>采用 3D Gaussian Splatting 替代传统体素渲染，提高 5 倍训练速度</li>
+                                <li>设计多尺度损失函数，强化高频细节重建效果</li>
+                                <li>引入视角补全模块，提高稀疏投影下的数据一致性</li>
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4 class="detail-subtitle">结果（Results）</h4>
+                            <ul class="styled-list">
+                                <li>LoDoPaB 数据集 SSIM 达 0.95</li>
+                                <li>辐射剂量降低 60% 仍保持可诊断质量</li>
+                                <li>相比传统方法在稀疏视角下表现更稳定</li>
+                            </ul>
+                            <div class="compare-container">
+                                <div class="compare-item">
+                                    <p class="compare-title">Before</p>
+                                    <img src="imgs_main/3DGS.png">
+                                </div>
+                                <div class="compare-item">
+                                    <p class="compare-title">After</p>
+                                    <img src="imgs_main/3DGS.png">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+        <div class="item text2">
+            <p>
+                <heading>Publications</heading>
+            </p>
+        </div>
+        <hr>
 
         <!-- CoFlnAI_AQA -->
         <div class="container2">
-          <div class="item image2">
-            <img src='imgs_main/CoFlnAI_AQA.png' width="auto"; height="auto">
-          </div>
-          <div class="item text2">
-            <a href="https://github.com/ZhouKanglei/CoFInAl_AQA/">
-              <papertitle>CoFInAl: Enhancing Action Quality Assessment with Coarse-to-Fine Instruction Alignment</papertitle>
-            </a>
-            <br>
-                  Kanglei Zhou, <strong><u>Junlin Li</u></strong>, Ruizhi Cai, Liyuan Wang, Xingxing Zhang, Xiaohui Liang
-            <br>
-            <strong>IJCAI</strong>, 2024.
-            <br>
-              <div class="box">
-                <a href="https://github.com/ZhouKanglei/CoFInAl_AQA/"><i class="fa fa-external-link"></i> Project page</a>
-              </div>
-              <div class="box">
-                  <a href="https://github.com/ZhouKanglei/CoFInAl_AQA/"><i class="fa fa-github"></i> Code</a>
-                  <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/ZhouKanglei/CoFInAl_AQA?style=social">
+            <div class="item image2">
+                <img src='imgs_main/CoFlnAI_AQA.png' width="auto" ; height="auto">
+            </div>
+            <div class="item text2">
+                <a href="https://github.com/ZhouKanglei/CoFInAl_AQA/">
+                    <papertitle>CoFInAl: Enhancing Action Quality Assessment with Coarse-to-Fine Instruction Alignment
+                    </papertitle>
+                </a>
+                <br>
+                Kanglei Zhou, <strong><u>Junlin Li</u></strong>, Ruizhi Cai, Liyuan Wang, Xingxing Zhang, Xiaohui Liang
+                <br>
+                <strong>International Joint Conference on Artificial Intelligence, IJCAI</strong>, 2024.(CCF A)
+                <br>
+                <div class="box">
+                    <a href="https://github.com/ZhouKanglei/CoFInAl_AQA/"><i class="fa fa-external-link"></i> Project
+                        page</a>
                 </div>
-              <div class="box">
-                  <a href="https://arxiv.org/abs/2404.13999"><i class="fa fa-file-pdf-o"></i> arXiv</a>
-              </div>
-          </div>
+                <div class="box">
+                    <a href="https://github.com/ZhouKanglei/CoFInAl_AQA/"><i class="fa fa-github"></i> Code</a>
+                    <img alt="GitHub stars" style="vertical-align:middle"
+                        src="https://img.shields.io/github/stars/ZhouKanglei/CoFInAl_AQA?style=social">
+                </div>
+                <div class="box">
+                    <a href="https://arxiv.org/abs/2404.13999"><i class="fa fa-file-pdf-o"></i> arXiv</a>
+                </div>
+            </div>
         </div>
-      
+
         <!-- AITOOTH -->
         <div class="container2">
-          <div class="item image2">
-            <img src='imgs_main/AITOOTH.png' width="auto"; height="auto">
-          </div>
-          <!-- <div class="item image2">
+            <div class="item image2">
+                <img src='imgs_main/AITOOTH.png' width="auto" ; height="auto">
+            </div>
+            <!-- <div class="item image2">
               <video class="video" id="10" loop playsinline autoPlay muted
                   src="imgs_main/mani_gs.mp4" width=160; height="auto" onplay="resizeAndPlay(this) "></video>
           </div> -->
-          <div class="item text2">
-            <a href="https://github.com/aoxipo/AITOOTH/">
-              <papertitle>Diffusion-Based Conv-Former Dual-Encode U-Net: DDPM for Level Set Evolution Mapping</papertitle>
-            </a>
-            <br>
-            <strong><u>Junlin Li</u></strong>, Weixin Tian, Junliang Li, Yuan He, Wanglin Ke
-            <br>
-            <strong>MICCAI STS</strong>, 2023. 
-            <br>
-              <div class="box">
-                <a href="https://github.com/aoxipo/AITOOTH/"><i class="fa fa-external-link"></i> Project page</a>
-              </div>
-              <div class="box">
-                  <a href="https://github.com/aoxipo/AITOOTH"><i class="fa fa-github"></i> Code</a> 
-                  <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/aoxipo/AITOOTH?style=social">  
-              </div>
-              <div class="box">
-                  <a href="https://link.springer.com/chapter/10.1007/978-3-031-72396-4_8"><i class="fa fa-file-pdf-o"></i> Springer Nature</a>
-              </div>
-          </div>
+            <div class="item text2">
+                <a href="https://github.com/aoxipo/AITOOTH/">
+                    <papertitle>Diffusion-Based Conv-Former Dual-Encode U-Net: DDPM for Level Set Evolution Mapping
+                    </papertitle>
+                </a>
+                <br>
+                <strong><u>Junlin Li</u></strong>, Weixin Tian, Junliang Li, Yuan He, Wanglin Ke
+                <br>
+                <strong>MICCAI STS</strong>, 2023.(CCF B workshop)
+                <br>
+                <div class="box">
+                    <a href="https://github.com/aoxipo/AITOOTH/"><i class="fa fa-external-link"></i> Project page</a>
+                </div>
+                <div class="box">
+                    <a href="https://github.com/aoxipo/AITOOTH"><i class="fa fa-github"></i> Code</a>
+                    <img alt="GitHub stars" style="vertical-align:middle"
+                        src="https://img.shields.io/github/stars/aoxipo/AITOOTH?style=social">
+                </div>
+                <div class="box">
+                    <a href="https://link.springer.com/chapter/10.1007/978-3-031-72396-4_8"><i
+                            class="fa fa-file-pdf-o"></i> Springer Nature</a>
+                </div>
+            </div>
         </div>
-        
+
         <!-- TSC -->
         <div class="container2">
-          <div class="item image2">
-            <img src='imgs_main/TSC.png' width="auto"; height="auto">
-          </div>
-          <div class="item text2">
-            <a href="https://github.com/aoxipo/TSC/">
-              <papertitle>TSC:Efficient FRB Signal Search by a Two-stage Cascade Deep Learning Model on FAST</papertitle>
-            </a>
-            <br>
-            <!-- Liyang Chen,  -->
-               Ronghuan Yan, <strong><u>Junlin Li</u></strong>, Weixin Tian, Nyasha Mkwanda
-            <br>
-            <strong>RAA</strong>, 2025. 
-            <br>
-              <div class="box">
-                <a href="https://github.com/aoxipo/TSC/"><i class="fa fa-external-link"></i> Project page</a>
-              </div>
-              <div class="box">
-                  <a href="https://github.com/aoxipo/TSC/"><i class="fa fa-github"></i> Code</a>
-                  <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/aoxipo/TSC?style=social">
-              </div>
-              <div class="box">
-                  <a href="https://iopscience.iop.org/article/10.1088/1674-4527/adb36c"><i class="fa fa-file-pdf-o"></i> IOPscience</a>
-              </div>
-          </div>
+            <div class="item image2">
+                <img src='imgs_main/TSC.png' width="auto" ; height="auto">
+            </div>
+            <div class="item text2">
+                <a href="https://github.com/aoxipo/TSC/">
+                    <papertitle>TSC:Efficient FRB Signal Search by a Two-stage Cascade Deep Learning Model on FAST
+                    </papertitle>
+                </a>
+                <br>
+                <!-- Liyang Chen,  -->
+                Ronghuan Yan, <strong><u>Junlin Li</u></strong>, Weixin Tian, Nyasha Mkwanda
+                <br>Published in <strong>Research in Astronomy and Astrophysics, RAA</strong>, 2025. Q3. 中科院3区. IF 1.8
+                <br>
+                <div class="box">
+                    <a href="https://github.com/aoxipo/TSC/"><i class="fa fa-external-link"></i> Project page</a>
+                </div>
+                <div class="box">
+                    <a href="https://github.com/aoxipo/TSC/"><i class="fa fa-github"></i> Code</a>
+                    <img alt="GitHub stars" style="vertical-align:middle"
+                        src="https://img.shields.io/github/stars/aoxipo/TSC?style=social">
+                </div>
+                <div class="box">
+                    <a href="https://iopscience.iop.org/article/10.1088/1674-4527/adb36c"><i
+                            class="fa fa-file-pdf-o"></i> IOPscience</a>
+                </div>
+            </div>
         </div>
-      
+
         <!-- DAAL -->
         <div class="container2">
-          <div class="item image2">
-            <img src='imgs_main/DAAL.png' width="auto"; height="auto">
-          </div>
-          <div class="item text2">
-            <a href="https://github.com/aoxipo/DAAL/">
-              <papertitle>Dynamically adaptive adjustment loss function biased towards few-class learning</papertitle>
-            </a>
-            <br>
-            Guoqi Liu, Lu Bai, <strong><u>Junlin Li</u></strong>, Linyuan Ru, Baofang Chang
-            <br>
-            <strong>IET</strong>, 2022 
-            <br>
-              <div class="box">
-                <a href="https://github.com/aoxipo/DAAL/"><i class="fa fa-external-link"></i> Project page</a>
-              </div>
-              <div class="box">
-                  <a href="https://github.com/aoxipo/DAAL/"><i class="fa fa-github"></i> Code</a>
-              </div>
-              <div class="box">
-                  <a href="https://arxiv.org/abs/2310.06744"><i class="fa fa-file-pdf-o"></i> arXiv</a>
-              </div>
-          </div>
+            <div class="item image2">
+                <img src='imgs_main/DAAL.png' width="auto" ; height="auto">
+            </div>
+            <div class="item text2">
+                <a href="https://github.com/aoxipo/DAAL/">
+                    <papertitle>Dynamically adaptive adjustment loss function biased towards few-class learning
+                    </papertitle>
+                </a>
+                <br>
+                Guoqi Liu, Lu Bai, <strong><u>Junlin Li</u></strong>, Linyuan Ru, Baofang Chang
+                <br>
+                <strong>IET Image Processing</strong>, 2022. Q2. 中科院4区. IF 2.2
+                <br>
+                <div class="box">
+                    <a href="https://github.com/aoxipo/DAAL/"><i class="fa fa-external-link"></i> Project page</a>
+                </div>
+                <div class="box">
+                    <a href="https://github.com/aoxipo/DAAL/"><i class="fa fa-github"></i> Code</a>
+                </div>
+                <div class="box">
+                    <a href="https://doi.org/10.1049/ipr2.12661"><i class="fa fa-file-pdf-o"></i> IET Image
+                        Processing</a>
+                </div>
+            </div>
         </div>
-      
-    <!-- <div class="item text2">
-        <p>
-          <heading>Academic Services</heading>
-        </p>
-          <p>
-        <ul>
-            <li>Main organizer of ...</li>
-            <li>Serve as reviewer for ICCV, CVPR, ECCV, 3DV, AAAI, and SIGGRAPH.</li>
-        </ul>
-        </p>
-    </div> -->
 
-     <!-- <div class="item text2">
-      <p>
-        <heading>Experience</heading>
-    </p>
-      <hr>
-      <p>
-        During my studies, I had the opportunity to work as a research intern at: <br>
-        <li><strong>Microsoft Research Asia</strong> (2021) (advised by Dr. <a href="https://jlyang.org/">Jiaolong Yang</a> and Dr. <a href="https://scholar.google.com/citations?user=P91a-UQAAAAJ&hl=en">Xin Tong</a>),</li> <br>
-                
-      </p>
-    </div> -->
 
-    <hr>
-    <!-- </tbody></table> -->
-      <!-- <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody> -->
+
+        <hr>
+        <!-- </tbody></table> -->
+        <!-- <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody> -->
         <!-- <tr> -->
-          <!-- <td style="padding:0px"> -->
-            <!-- <br> -->
-            <p style="text-align:right; font-size:0.8em;">
-                Last updated in Feb. 2025. Template adapted from <a href="https://sanweiliti.github.io/" style="font-size:1.0em;" >Siwei Zhang</a>'s and <a href="https://qianlim.github.io/"  style="font-size:1.0em;">Qianli Ma</a>'s websites.
-            </p>
-          <!-- </td> -->
+        <!-- <td style="padding:0px"> -->
+        <!-- <br> -->
+        <p style="text-align:right; font-size:0.8em;">
+            Last updated in Feb. 2025. Template adapted from <a href="https://sanweiliti.github.io/"
+                style="font-size:1.0em;">Siwei Zhang</a>'s and <a href="https://qianlim.github.io/"
+                style="font-size:1.0em;">Qianli Ma</a>'s websites.
+        </p>
+        <!-- </td> -->
         <!-- </tr> -->
-    <!-- </tbody></table> -->
+        <!-- </tbody></table> -->
 
-    <script type="text/javascript" src="show_bib.js"></script>
+        <script type="text/javascript" src="show_bib.js"></script>
     </div>
-<br>
+    <br>
 
 </body>
 
